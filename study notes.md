@@ -20,19 +20,21 @@
 * 算法分析：为一项任务选择最合适的算法而进行的分析
 * 学习算法是非常有趣和令人激动的，因为这是一个历久弥新的领域（我们学习的绝大多数算法都还不到“五十岁”……）
 
-### 1.1.4 简便记法
+### 1.1 基础编程模型
+* 我们把描述和实现算法所用到的语言特性、软件库和操作系统特性总称为**基础编程模型**
 
+#### 1.1.4 简便记法
 * 程序有很多写法，我们追求清晰、优雅和高效的代码
 
-### 1.1.5.1 创建并初始化数组
+#### 1.1.5.1 创建并初始化数组
 * 在代码中使用数组时，一定要依次声明、创建并初始化数组。忽略了其中的任何一步都是很常见的编程错误。
 
-### 1.1.6.1 静态方法
+#### 1.1.6.1 静态方法
 * 方法需要**参数**（某种数据类型的值）并根据参数计算出某种数据类型的**返回值**（例如数学函数的结果）或者产生某种**副作用**（例如打印一个值）
 
 * 典型静态方法的实现
   * 判断一个数是否是素数
-  ```java
+    ```java
   public static boolean isPrime(int N)
   {
     if (N < 2) return false;
@@ -40,9 +42,9 @@
       if (N % i == 0) return false;
     return true;
   }
-  ```
+    ```
   * 计算平方根（牛顿迭代法）
-  ```java
+    ```java
   public static double sqrt(double c)
   {
     if (c < 0) return Double.NaN;
@@ -52,22 +54,22 @@
       t = (c/t + t) / 2.0;
     return t;
   }
-  ```
+    ```
     * 牛顿法（Newton's method）
-求 $$a$$ 的 $$m$$ 次方根
-$$
+      求 $$a$$ 的 $$m$$ 次方根
+      $$
 x_{n+1} = x_{n} - \frac{x_{n}}{m}(1 - ax_{n}^{-m})
-$$
-当 $$m=2$$ 时，则：
-$$
+      $$
+      当 $$m=2$$ 时，则：
+      $$
 \begin{aligned}
 x_{n+1} &= x_{n} - \frac{x_{n}}{2}(1 - ax_{n}^{-2})\\
 &=\frac{x_n}{2}+\frac{ax_n^{-1}}{2}\\
 &=(a/x_n + x_n)/2
 \end{aligned}
-$$
+      $$
 
-### 1.1.6.4 递归
+#### 1.1.6.4 递归
 * 递归代码比相应的非递归代码更加简洁优雅、易懂
 * 编写递归代码时最重要的有以下三点
   * 递归总有一个**最简单的情况**——方法的第一条语句总是一个包含 return 的条件语句
@@ -75,7 +77,8 @@ $$
   * 递归调用的父问题和尝试解决的子问题之间不应该有**交集**
 * 坚持这些原则能写出清晰、正确且容易评估性能的程序
 * 使用递归的另一个原因：可以使用数学模型来估计程序的性能
-* **二项分布**。估计用以下代码计算 binomial(100, 50, 0.25) 将会产生的递归调用次数：
+
+* 练习 1.1.27：**二项分布**。估计用以下代码计算 binomial(100, 50, 0.25) 将会产生的递归调用次数：
   ```java
   public static double binomial(int N, int k, double p)
   {
@@ -85,9 +88,9 @@ $$
   }
   ```
   将已经计算过的值保存在数组中并给出一个更好的实现。
-* 解：
-  将 $$binomial(N, k, p)$$ 产生的递归调用次数记为 $$c(n, k)$$，当 $$k>0$$ 时，则：
-  $$
+  * 解：
+    将 $$binomial(N, k, p)$$ 产生的递归调用次数记为 $$c(n, k)$$，当 $$k>0$$ 时，则：
+    $$
   \begin{aligned}
   c(n, k) &= 1 + c(n-1, k) + c(n-1, k-1)\\
   &= 2 + c(n-2, k) + c(n-2, k-1) + c(n-1, k-1)\\
@@ -96,25 +99,38 @@ $$
   &= n+1 + c(-1, k) + c(-1, k-1) + c(0, k-1) + ... + c(n-1, k-1)\\
   &= n+3+\sum_{i=0}^{n-1}c(i,k-1)
   \end{aligned}
-  $$
-
-  * 二项分布
-    设 $$X$$ 为 $$n$$ 重贝努利试验中成功的次数，则称 $$X$$ 取值的概率分布为**二项分布**，记为 $$b(n, p)$$。
-    * $$n$$ 重贝努利试验的特点
-      1. 重复进行 $$n$$ 次相互独立的试验
-      2. 每次试验只有成功或失败中的一个结果
-      3. 每次出现成功的概率均为 $$p$$
-
-  * $$binomial(n, k, p)$$ 表示事件 “$$n$$ 重贝努利试验中成功出现 $$k$$ 次” 的概率，则：
-    对于其中任意一次贝努利试验，成功概率为 $$p$$，
-    若其成功，则事件变为 $$n-1$$ 重贝努利试验中成功出现 $$k-1$$ 次；
-    若其失败，则事件变为 $$n-1$$ 重贝努利试验中成功出现 $$k$$ 次。
-    故：
     $$
+
+    * 二项分布
+      设 $$X$$ 为 $$n$$ 重贝努利试验中成功的次数，则称 $$X$$ 取值的概率分布为**二项分布**，记为 $$b(n, p)$$。
+      * $$n$$ 重贝努利试验的特点
+        1. 重复进行 $$n$$ 次相互独立的试验
+        2. 每次试验只有成功或失败中的一个结果
+        3. 每次出现成功的概率均为 $$p$$
+
+    * $$binomial(n, k, p)$$ 表示事件 “$$n$$ 重贝努利试验中成功出现 $$k$$ 次” 的概率，则：
+      对于其中任意一次贝努利试验，成功概率为 $$p$$，
+      若其成功，则事件变为 $$n-1$$ 重贝努利试验中成功出现 $$k-1$$ 次；
+      若其失败，则事件变为 $$n-1$$ 重贝努利试验中成功出现 $$k$$ 次。
+      故：
+      $$
 binomial(n, k, p) = p*binomial(n-1, k-1, p) + (1-p)*binomial(n-1, k, p)
-    $$
-    又 $$n\geqslant k$$，则需判断：
-      $$k<0$$ 时，概率为 0
-      $$n<k$$ 时，概率为 0
-      $$n=0, k=0$$ 时，概率为 1
+      $$
+      又 $$n\geqslant k$$，则需判断：
+        $$k<0$$ 时，概率为 0；
+        $$n<k$$ 时，概率为 0；
+        $$n=0, k=0$$ 时，概率为 1。
 
+#### 1.1.7 API (Application programming interface)
+  * In computer programming, an application programming interface (API) is a set of subroutine definitions, communication protocols, and tools for building software.
+  * In general terms, it is a set of clearly defined methods of communication among various components. An API specification can take many forms, but often includes specifications for routines, data structures, object classes, variables, or remote calls.
+  * A good API makes it easier to develop a computer program by providing all the building blocks, which are then put together by the programmer. Documentation for the API usually is provided to facilitate usage and implementation.
+  * API 的目的是将调用和实现**分离**
+    * API 是调用和实现之间的一份**契约**，它详细说明了每个方法的作用。实现的目标就是能够遵守这份契约。
+
+#### 1.1.9.5 重定向与管道
+* 结合标准输入输出的重定向，将一个程序的输出重定向为另一个程序的输入叫做**管道**：
+  ```shell
+  % java RandomSeq 1000 100.0 200.0 | java Average
+  ```
+  这样做的影响非常深远，因为它突破了能够处理的输入输出流的长度限制。例如：即使计算机没有足够的空间来存储十亿个数，仍然可以将例子中的 1000 换成 1 000 000 000。输入输出流中字符串的增删动作发生的实际顺序取决于操作系统。
