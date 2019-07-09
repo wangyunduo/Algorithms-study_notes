@@ -179,3 +179,54 @@ binomial(n, k, p) = p*binomial(n-1, k-1, p) + (1-p)*binomial(n-1, k, p)
   $$
 * -14/3 = 14/-3 = -4;   -14 % 3 = -2,  14 % -3 = 2
 
+#### 1.1 练习
+##### 1.1.6 下面这段程序会打印出什么？
+```java
+int f = 0;
+int g = 1;
+for (int i = 0; i <= 15; i++)
+{
+  StdOuut.println(f);
+  f = f + g;
+  g = f - g;
+}
+```
+* 解：
+  1. 将斐波那契数列的定义：$$f(i) + f(i+1) = f(i+2)\ (i\in N,\ f(0)=0,\ f(1)=1)$$ 推广到 $$i\in Z$$，这样一来，可写成 ..., 2, -1, 1, 0, 1, 1, 2, ...
+  2. 由 1.：程序中变量 `f` 和 `g` 的初始值可理解为 $$f(0),\ f(-1)$$，记为 `f(i), f(i-1) (i = 0)`
+  3. 迭代过程中 `f = f + g = f(i) + f(i-1) = f(i+1)`，`g = f - g = f(i+1) - f(i-1) = f(i)`
+  4. 迭代结果：`f = f(i+1), g = f(i)`
+  5. 故，打印出的是斐波那契数列的前 15 项
+
+##### 1.1.9 实现 `Integer.toBinaryString(N)`
+* Solution:
+  ```java
+  String s = "";
+  for (int n = N; n > 0; n /= 2)
+    s = (n % 2) + s
+  ```
+
+##### 1.1.18 请看以下递归函数：
+```java
+public static int mystery(int a, int b)
+{
+  if (b == 0)     return 0;
+  if (b % 2 == 0) return mystery(a+a, b/2);
+  return mystery(a+a, b/2) + a;
+}
+```
+* `mystery(a, b)` 的计算结果是 $$a * b$$；
+  将代码中的 `+` 替换为 `*`，`0` 替换为 `1`，计算结果为 $$a^b$$
+
+
+
+
+
+
+
+
+
+
+
+
+
