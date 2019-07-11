@@ -246,7 +246,44 @@ public static int mystery(int a, int b)
 ##### Q1 **指针**是什么？
 * 问得好。……但众所周知，指针的编程非常容易出错，因此需要精心设计指针类的操作以帮助程序员避免错误。Java 将这种观点发挥到了极致（许多主流编程语言的设计者也赞同这种做法）。在 Java 中，创建引用的方法**只有一种**（new），且改变引用的方法也**只有一种**（赋值语句）。
 
+### 1.3 背包、队列和栈
+#### 1.3.2.2 泛型
+* 创建泛型数组在 Java 中是不允许的，需要使用强制类型转换：`a = (Item[]) new Object[cap]`
 
-
+#### 1.3.2.3 调整数组大小
+* 首先，实现一个方法将栈移动到另一个大小不同的数组中：
+  ```java
+  private void resize(int max)
+  {  // 将大小为 N < = max 的栈移动到一个新的大小为 max 的数组中
+    Item[] temp = (Item[]) new Object[max];
+    for (int i = 0; i < N; i++)
+      temp[i] = a[i];
+    a = temp;
+  }
+  ```
+  
+* 在 `push()` 中，检查数组是否太小
+  ```java
+  public void push(Item item)
+  {  // 将元素压入栈顶
+     if (N == a.length) resize(2*a.length);
+     a[N++] = item;
+  }
+  ```
+  
+* 在 `pop()` 中，首先删除栈顶元素，然后如果数组太大我们就将它的长度**减半**。只要稍加思考，你就明白正确的检测条件是栈大小是否小于**数组的四分之一**。
+  （代码实现中判断的是“是否相等”，原因是：`private Item[] a = (Item[]) new Object[1]`）
+  
+  ```java
+  public Item pop()
+  {  // 从栈顶删除元素
+     Item item = a[--N];
+     a[N] = null;  // 避免对象游离
+     if (N > 0 && N == a.length/4) resize(a.length/2);
+     return item;
+  }
+  ```
+  
+* 在这个实现中，栈永远不会溢出，使用率也永远不会低于四分之一（除非栈为空，那种情况下数组的大小为 1）
 
 
